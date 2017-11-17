@@ -1,13 +1,7 @@
-FROM centos:7
+FROM opnfv/compass-tasks-base
 
-ARG BRANCH=master
-ADD . /root/compass-tasks
-
-RUN /root/compass-tasks/build.sh
-
-EXPOSE 6379
-
-VOLUME ["/var/ansible", "/etc/compass/machine_list", "/etc/compass/switch_list"]
-
-ENTRYPOINT ["/bin/bash", "-c"]
-CMD ["/usr/local/bin/start.sh"]
+ADD ./run.sh /root/
+#ADD ./tacker_conf /opt/tacker_conf
+ADD ./setup-complete.yml /opt/
+RUN chmod +x /root/run.sh
+RUN /root/run.sh
