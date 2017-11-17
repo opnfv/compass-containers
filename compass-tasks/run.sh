@@ -3,6 +3,12 @@
 yum install https://rdoproject.org/repos/openstack-ocata/rdo-release-ocata.rpm -y
 yum install git ntp wget ntpdate openssh-server python-devel sudo '@Development Tools' -y
 
+pip install ansible==2.3.1.0
+rm -rf  /opt/kargo_k8s
+git clone https://github.com/kubernetes-incubator/kubespray.git /opt/kargo_k8s
+cd /opt/kargo_k8s
+git checkout v2.2.0
+
 mkdir -p /opt/git/
 cd /opt/git/
 wget artifacts.opnfv.org/compass4nfv/package/openstack.tar.gz
@@ -42,3 +48,5 @@ python pw-token-gen.py --file /etc/openstack_deploy/user_secrets.yml
 
 cd /opt/openstack-ansible/playbooks/inventory/group_vars
 sed -i 's/#repo_build_git_cache/repo_build_git_cache/g' repo_all.yml
+
+mv /usr/local/bin/ansible /tmp
