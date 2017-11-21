@@ -33,9 +33,10 @@ bind-address=0.0.0.0
 EOF
 }
 
-
-if [[ -z ${1} ]]; then
+if [ ! -f /etc/db_created ]; then
     create_users_and_dbs
     listen_on_all_interfaces
-    /usr/bin/mysqld_safe
+    touch /etc/db_created
 fi
+
+/usr/bin/mysqld_safe
