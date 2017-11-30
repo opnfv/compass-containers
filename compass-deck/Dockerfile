@@ -1,5 +1,6 @@
 FROM huangxiangyu/centos-systemd
 
+ARG BRANCH=master
 ADD . /root/compass-deck
 
 RUN /root/compass-deck/build.sh

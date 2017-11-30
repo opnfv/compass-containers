@@ -1,6 +1,7 @@
 FROM compassindocker/systemd-base
 ENV container docker
 VOLUME [ "/sys/fs/cgroup" ]
+ARG BRANCH=master
 
 # pkgs and services...
 RUN yum -y update && \

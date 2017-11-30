@@ -1,6 +1,7 @@
 FROM ubuntu:trusty
 
 EXPOSE 3306
+ARG BRANCH=master
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server && \

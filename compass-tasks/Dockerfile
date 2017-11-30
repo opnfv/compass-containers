@@ -1,5 +1,6 @@
 FROM centos:7
 
+ARG BRANCH=master
 ADD . /root/compass-tasks
 
 RUN /root/compass-tasks/build.sh
