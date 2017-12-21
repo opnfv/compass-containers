@@ -14,7 +14,8 @@ RUN yum -y update && \
     systemctl enable cobblerd && \
     systemctl enable httpd && \
     systemctl enable dhcpd && \
-    systemctl enable xinetd
+    systemctl enable xinetd && \
+    systemctl enable ntpd
 
 # some tweaks on services
 RUN sed -i -e 's/\(^.*disable.*=\) yes/\1 no/' /etc/xinetd.d/tftp && \
