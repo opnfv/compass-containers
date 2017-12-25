@@ -6,7 +6,7 @@ ARG BRANCH=master
 # pkgs and services...
 RUN yum -y update && \
     yum -y install epel-release && \
-    yum -y install wget dhcp bind syslinux pykickstart file initscripts net-tools tcpdump xinetd vim avahi avahi-tools && \
+    yum -y install wget dhcp bind syslinux pykickstart file initscripts net-tools tcpdump xinetd vim avahi avahi-tools ntp && \
     wget http://artifacts.opnfv.org/compass4nfv/package/cobbler/cobbler-2.6.10-1.fc22.noarch.rpm && \
     wget http://artifacts.opnfv.org/compass4nfv/package/cobbler/cobbler-web-2.6.10-1.fc22.noarch.rpm && \
     yum -y localinstall cobbler-2.6.10-1.fc22.noarch.rpm cobbler-web-2.6.10-1.fc22.noarch.rpm && \
