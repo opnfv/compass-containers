@@ -10,6 +10,8 @@
 set -x
 COMPASS_DIR=${BASH_SOURCE[0]%/*}
 
+COMPASS_MODULE=(actions api apiclient utils db tasks deployment)
+
 yum update -y
 
 yum --nogpgcheck install -y which python python-devel git wget syslinux amqp mod_wsgi httpd bind rsync yum-utils gcc unzip openssl openssl098e ca-certificates mysql-devel mysql MySQL-python python-virtualenv python-setuptools python-pip bc libselinux-python libffi-devel openssl-devel vim net-tools
@@ -52,8 +54,12 @@ mkdir -p /var/log/compass
 chmod -R 777 /var/log/compass
 chmod -R 777 /opt/compass/db
 mkdir -p $COMPASS_DIR/compass
-mv $COMPASS_DIR/{actions,api,apiclient,utils,db,tasks,deployment} $COMPASS_DIR/compass/
+for((i=0; i<${#COMPASS_MODULE[@]}; i++))
+do
+    mv $COMPASS_DIR/${COMPASS_MODULE[i]} $COMPASS_DIR/compass/
+done
 touch $COMPASS_DIR/compass/__init__.py
+
 source `which virtualenvwrapper.sh`
 workon compass-core
 cd /root/compass-deck
