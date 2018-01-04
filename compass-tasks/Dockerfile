@@ -1,4 +1,5 @@
-FROM opnfv/compass-tasks-base
+FROM huangxiangyu/compass-tasks-base
+ARG BRANCH=master
 
 ADD ./run.sh /root/
 #ADD ./tacker_conf /opt/tacker_conf
