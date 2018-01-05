@@ -1,4 +1,4 @@
-FROM huangxiangyu/compass-tasks-base
+FROM opnfv/compass-tasks-base
 ARG BRANCH=master
 
 ADD ./run.sh /root/
