@@ -30,8 +30,8 @@ cd /opt/openstack-ansible
 #git checkout b962eed003580ee4c3bd69da911f20b3905a9176
 #git checkout da37351ca0a96ed38de72f3e00a7549a024cb810
 #git checkout 71110d6bc0f459b668948aca185139c1d79f0452
-#git checkout 16c69046bfd90d1b984de43bc6267fece6b75f1c
-git checkout 4cde8f86aaea1fde7c43016f661119879068a133
+git checkout 16c69046bfd90d1b984de43bc6267fece6b75f1c
+#git checkout 4cde8f86aaea1fde7c43016f661119879068a133
 
 git checkout -b stable/pike
 
@@ -62,7 +62,7 @@ cp /opt/setup-complete.yml /opt/openstack-ansible/playbooks/
 echo "- include: setup-complete.yml" >> /opt/openstack-ansible/playbooks/setup-infrastructure.yml
 
 # rm ansible json module
-# mv /usr/lib/python2.7/site-packages/ansible/plugins/callback/json.py*  /tmp/
+# mv /root/.virtualenvs/compass-core/lib/python2.7/site-packages/ansible/plugins/callback/json.py*  /tmp/
 
 # add ansible-playbook for normal use
 ln -s /root/.virtualenvs/compass-core/bin/ansible-playbook /usr/bin/ansible-playbook
