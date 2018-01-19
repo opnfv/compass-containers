@@ -10,4 +10,6 @@ RUN apt-get update && \
 COPY entrypoint.sh /sbin/entrypoint.sh
 RUN chmod 755 /sbin/entrypoint.sh
 
+VOLUME ["/var/lib/mysql"]
+
 CMD ["/sbin/entrypoint.sh"]
