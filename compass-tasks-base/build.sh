@@ -36,7 +36,7 @@ echo "UserKnownHostsFile /dev/null" >> /root/.ssh/config;
 echo "StrictHostKeyChecking no" >> /root/.ssh/config
 
 easy_install --upgrade pip
-pip install --upgrade pip
+pip install --upgrade pip==9.0.1
 pip install --upgrade setuptools
 pip install --upgrade Flask
 pip install --upgrade virtualenvwrapper
