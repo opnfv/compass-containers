@@ -21,7 +21,7 @@ rm -rf $COMPASS_DIR/../compass-web/.git
 
 easy_install --upgrade pip
 easy_install --upgrade six
-pip install --upgrade pip
+pip install --upgrade pip==9.0.1
 pip install --upgrade setuptools
 pip install --upgrade virtualenv
 pip install --upgrade redis
