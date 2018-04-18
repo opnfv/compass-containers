@@ -1,0 +1,122 @@
+From c053406e75618bb445da2be41c880c2420095d6e Mon Sep 17 00:00:00 2001
+From: Yibo Cai <yibo.cai@linaro.org>
+Date: Tue, 10 Apr 2018 13:25:00 +0800
+Subject: [PATCH] fixup docker package
+
+---
+ roles/docker/tasks/systemd.yml                       | 10 +++++++++-
+ roles/docker/templates/docker-options-centos.conf.j2 |  8 ++++++++
+ roles/docker/vars/debian.yml                         |  8 +++++++-
+ roles/docker/vars/redhat.yml                         |  7 ++++++-
+ roles/docker/vars/ubuntu.yml                         |  8 +++++++-
+ 5 files changed, 37 insertions(+), 4 deletions(-)
+ create mode 100644 roles/docker/templates/docker-options-centos.conf.j2
+
+diff --git a/roles/docker/tasks/systemd.yml b/roles/docker/tasks/systemd.yml
+index ec4bbf9..77531c1 100644
+--- a/roles/docker/tasks/systemd.yml
++++ b/roles/docker/tasks/systemd.yml
+@@ -36,6 +36,14 @@
+     src: docker-options.conf.j2
+     dest: "/etc/systemd/system/docker.service.d/docker-options.conf"
+   notify: restart docker
++  when: ansible_distribution != 'CentOS'
++
++- name: Write docker options systemd drop-in for CentOS7
++  template:
++    src: docker-options-centos.conf.j2
++    dest: "/etc/systemd/system/docker.service.d/docker-options.conf"
++  notify: restart docker
++  when: ansible_distribution == 'CentOS'
+ 
+ - name: Write docker dns systemd drop-in
+   template:
+@@ -44,4 +52,4 @@
+   notify: restart docker
+   when: dns_mode != 'none' and resolvconf_mode == 'docker_dns'
+ 
+-- meta: flush_handlers
+\ No newline at end of file
++- meta: flush_handlers
+diff --git a/roles/docker/templates/docker-options-centos.conf.j2 b/roles/docker/templates/docker-options-centos.conf.j2
+new file mode 100644
+index 0000000..829134e
+--- /dev/null
++++ b/roles/docker/templates/docker-options-centos.conf.j2
+@@ -0,0 +1,8 @@
++[Service]
++Environment="DOCKER_OPTS={{ docker_options | default('') }} \
++--add-runtime docker-runc=/usr/libexec/docker/docker-runc-current \
++--default-runtime=docker-runc \
++--exec-opt native.cgroupdriver=systemd \
++--userland-proxy-path=/usr/libexec/docker/docker-proxy-current \
++--signature-verification=false \
++--iptables=false"
+diff --git a/roles/docker/vars/debian.yml b/roles/docker/vars/debian.yml
+index 240e86e..5d87d48 100644
+--- a/roles/docker/vars/debian.yml
++++ b/roles/docker/vars/debian.yml
+@@ -10,10 +10,16 @@ docker_versioned_pkg:
+   'stable': docker-engine=17.03.0~ce-0~debian-{{ ansible_distribution_release|lower }}
+   'edge': docker-engine=17.03.0~ce-0~debian-{{ ansible_distribution_release|lower }}
+ 
++#docker_package_info:
++#  pkg_mgr: apt
++#  pkgs:
++#    - name: "{{ docker_versioned_pkg[docker_version | string] }}"
++#      force: yes
++
+ docker_package_info:
+   pkg_mgr: apt
+   pkgs:
+-    - name: "{{ docker_versioned_pkg[docker_version | string] }}"
++    - name: docker.io
+       force: yes
+ 
+ docker_repo_key_info:
+diff --git a/roles/docker/vars/redhat.yml b/roles/docker/vars/redhat.yml
+index 8b20def..d5625fa 100644
+--- a/roles/docker/vars/redhat.yml
++++ b/roles/docker/vars/redhat.yml
+@@ -14,10 +14,15 @@ docker_versioned_pkg:
+ # https://docs.docker.com/engine/installation/linux/centos/#install-from-a-package
+ # https://download.docker.com/linux/centos/7/x86_64/stable/Packages/
+ 
++#docker_package_info:
++#  pkg_mgr: yum
++#  pkgs:
++#    - name: "{{ docker_versioned_pkg[docker_version | string] }}"
++
+ docker_package_info:
+   pkg_mgr: yum
+   pkgs:
+-    - name: "{{ docker_versioned_pkg[docker_version | string] }}"
++    - name: docker
+ 
+ docker_repo_key_info:
+   pkg_key: ''
+diff --git a/roles/docker/vars/ubuntu.yml b/roles/docker/vars/ubuntu.yml
+index 1fd7efd..172afd3 100644
+--- a/roles/docker/vars/ubuntu.yml
++++ b/roles/docker/vars/ubuntu.yml
+@@ -10,10 +10,16 @@ docker_versioned_pkg:
+   'stable': docker-engine=17.03.0~ce-0~ubuntu-{{ ansible_distribution_release|lower }}
+   'edge': docker-engine=17.03.0~ce-0~ubuntu-{{ ansible_distribution_release|lower }}
+ 
++#docker_package_info:
++#  pkg_mgr: apt
++#  pkgs:
++#    - name: "{{ docker_versioned_pkg[docker_version | string] }}"
++#      force: yes
++
+ docker_package_info:
+   pkg_mgr: apt
+   pkgs:
+-    - name: "{{ docker_versioned_pkg[docker_version | string] }}"
++    - name: docker.io
+       force: yes
+ 
+ docker_repo_key_info:
+-- 
+2.7.4
+
