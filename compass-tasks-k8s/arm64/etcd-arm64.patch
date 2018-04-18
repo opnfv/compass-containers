@@ -1,0 +1,24 @@
+From 2ec3201a94ccc46406f7ff569545fb94d5a53aa5 Mon Sep 17 00:00:00 2001
+From: Yibo Cai <yibo.cai@linaro.org>
+Date: Fri, 19 Jan 2018 11:00:38 +0800
+Subject: [PATCH] arm64
+
+---
+ roles/etcd/templates/etcd.j2 | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/roles/etcd/templates/etcd.j2 b/roles/etcd/templates/etcd.j2
+index 11f8f74..3a0e8f3 100644
+--- a/roles/etcd/templates/etcd.j2
++++ b/roles/etcd/templates/etcd.j2
+@@ -3,6 +3,7 @@
+   --restart=on-failure:5 \
+   --env-file=/etc/etcd.env \
+   --net=host \
++  -e ETCD_UNSUPPORTED_ARCH=arm64 \
+   -v /etc/ssl/certs:/etc/ssl/certs:ro \
+   -v {{ etcd_cert_dir }}:{{ etcd_cert_dir }}:ro \
+   -v {{ etcd_data_dir }}:{{ etcd_data_dir }}:rw \
+--
+2.7.4
+

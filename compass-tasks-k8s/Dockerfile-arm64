@@ -1,0 +1,5 @@
+FROM opnfv/compass-tasks-base
+
+COPY arm64/* /root/
+RUN chmod +x /root/run.sh
+RUN /root/run.sh
