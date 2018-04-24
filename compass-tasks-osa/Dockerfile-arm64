@@ -1,0 +1,3 @@
+FROM opnfv/compass-tasks-base
+
+# TODO: support arm64
