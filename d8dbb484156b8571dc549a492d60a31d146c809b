@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3f45e8_3d286685",
+        "filename": "compass-tasks-osa/run.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 605
+      },
+      "writtenOn": "2018-04-27T01:44:07Z",
+      "side": 1,
+      "message": "There is no such tarball now on artifacts now. I can  create one and upload it later.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 30
+      },
+      "revId": "d8dbb484156b8571dc549a492d60a31d146c809b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_5d0c523b",
+        "filename": "compass-tasks-osa/run.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 605
+      },
+      "writtenOn": "2018-04-27T01:44:07Z",
+      "side": 1,
+      "message": "Your local failure may be caused by this. Please modify it like this: git checkout remotes/origin/stable/queens",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 29
+      },
+      "revId": "d8dbb484156b8571dc549a492d60a31d146c809b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
