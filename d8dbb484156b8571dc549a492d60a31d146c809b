@@ -45,6 +45,30 @@
       "revId": "d8dbb484156b8571dc549a492d60a31d146c809b",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_33d2575c",
+        "filename": "compass-tasks-osa/run.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 7063
+      },
+      "writtenOn": "2018-04-27T18:51:54Z",
+      "side": 1,
+      "message": "Yifei, there is still local failure.",
+      "parentUuid": "5a3f45e8_5d0c523b",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 29
+      },
+      "revId": "d8dbb484156b8571dc549a492d60a31d146c809b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
