@@ -1,22 +1,22 @@
-From c053406e75618bb445da2be41c880c2420095d6e Mon Sep 17 00:00:00 2001
+From cf5025dcea741a8491fc7bf219cc2ca29fcac29d Mon Sep 17 00:00:00 2001
 From: Yibo Cai <yibo.cai@linaro.org>
-Date: Tue, 10 Apr 2018 13:25:00 +0800
+Date: Thu, 19 Apr 2018 15:45:20 +0800
 Subject: [PATCH] fixup docker package
 
 ---
- roles/docker/tasks/systemd.yml                       | 10 +++++++++-
- roles/docker/templates/docker-options-centos.conf.j2 |  8 ++++++++
- roles/docker/vars/debian.yml                         |  8 +++++++-
- roles/docker/vars/redhat.yml                         |  7 ++++++-
- roles/docker/vars/ubuntu.yml                         |  8 +++++++-
- 5 files changed, 37 insertions(+), 4 deletions(-)
+ roles/docker/tasks/systemd.yml                       | 8 ++++++++
+ roles/docker/templates/docker-options-centos.conf.j2 | 8 ++++++++
+ roles/docker/vars/debian.yml                         | 8 +++++++-
+ roles/docker/vars/redhat.yml                         | 7 ++++++-
+ roles/docker/vars/ubuntu.yml                         | 8 +++++++-
+ 5 files changed, 36 insertions(+), 3 deletions(-)
  create mode 100644 roles/docker/templates/docker-options-centos.conf.j2
 
 diff --git a/roles/docker/tasks/systemd.yml b/roles/docker/tasks/systemd.yml
-index ec4bbf9..77531c1 100644
+index 90425fe..0953777 100644
 --- a/roles/docker/tasks/systemd.yml
 +++ b/roles/docker/tasks/systemd.yml
-@@ -36,6 +36,14 @@
+@@ -30,6 +30,14 @@
      src: docker-options.conf.j2
      dest: "/etc/systemd/system/docker.service.d/docker-options.conf"
    notify: restart docker
@@ -31,13 +31,6 @@ index ec4bbf9..77531c1 100644
 
  - name: Write docker dns systemd drop-in
    template:
-@@ -44,4 +52,4 @@
-   notify: restart docker
-   when: dns_mode != 'none' and resolvconf_mode == 'docker_dns'
-
--- meta: flush_handlers
-\ No newline at end of file
-+- meta: flush_handlers
 diff --git a/roles/docker/templates/docker-options-centos.conf.j2 b/roles/docker/templates/docker-options-centos.conf.j2
 new file mode 100644
 index 0000000..829134e
@@ -53,12 +46,12 @@ index 0000000..829134e
 +--signature-verification=false \
 +--iptables=false"
 diff --git a/roles/docker/vars/debian.yml b/roles/docker/vars/debian.yml
-index 240e86e..5d87d48 100644
+index 587e910..05d69fe 100644
 --- a/roles/docker/vars/debian.yml
 +++ b/roles/docker/vars/debian.yml
-@@ -10,10 +10,16 @@ docker_versioned_pkg:
-   'stable': docker-engine=17.03.0~ce-0~debian-{{ ansible_distribution_release|lower }}
-   'edge': docker-engine=17.03.0~ce-0~debian-{{ ansible_distribution_release|lower }}
+@@ -11,10 +11,16 @@ docker_versioned_pkg:
+   'stable': docker-engine=17.03.1~ce-0~debian-{{ ansible_distribution_release|lower }}
+   'edge': docker-engine=17.05.0~ce-0~debian-{{ ansible_distribution_release|lower }}
 
 +#docker_package_info:
 +#  pkg_mgr: apt
@@ -75,10 +68,10 @@ index 240e86e..5d87d48 100644
 
  docker_repo_key_info:
 diff --git a/roles/docker/vars/redhat.yml b/roles/docker/vars/redhat.yml
-index 8b20def..d5625fa 100644
+index 23c5419..42ab2a4 100644
 --- a/roles/docker/vars/redhat.yml
 +++ b/roles/docker/vars/redhat.yml
-@@ -14,10 +14,15 @@ docker_versioned_pkg:
+@@ -15,10 +15,15 @@ docker_versioned_pkg:
  # https://docs.docker.com/engine/installation/linux/centos/#install-from-a-package
  # https://download.docker.com/linux/centos/7/x86_64/stable/Packages/
 
@@ -96,12 +89,12 @@ index 8b20def..d5625fa 100644
  docker_repo_key_info:
    pkg_key: ''
 diff --git a/roles/docker/vars/ubuntu.yml b/roles/docker/vars/ubuntu.yml
-index 1fd7efd..172afd3 100644
+index f11f5bb..5992f8a 100644
 --- a/roles/docker/vars/ubuntu.yml
 +++ b/roles/docker/vars/ubuntu.yml
-@@ -10,10 +10,16 @@ docker_versioned_pkg:
-   'stable': docker-engine=17.03.0~ce-0~ubuntu-{{ ansible_distribution_release|lower }}
-   'edge': docker-engine=17.03.0~ce-0~ubuntu-{{ ansible_distribution_release|lower }}
+@@ -11,10 +11,16 @@ docker_versioned_pkg:
+   'stable': docker-engine=17.03.1~ce-0~ubuntu-{{ ansible_distribution_release|lower }}
+   'edge': docker-engine=17.05.0~ce-0~ubuntu-{{ ansible_distribution_release|lower }}
 
 +#docker_package_info:
 +#  pkg_mgr: apt
