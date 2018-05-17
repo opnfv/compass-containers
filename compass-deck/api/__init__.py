@@ -14,7 +14,7 @@
 
 import datetime
 from flask import Blueprint
-from flask.ext.login import LoginManager
+from flask_login import LoginManager
 from flask import Flask
 
 # from compass.api.v1.api import v1_app

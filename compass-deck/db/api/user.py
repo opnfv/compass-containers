@@ -18,7 +18,7 @@ import functools
 import logging
 import re
 
-from flask.ext.login import UserMixin
+from flask_login import UserMixin
 
 from compass.db.api import database
 from compass.db.api import utils

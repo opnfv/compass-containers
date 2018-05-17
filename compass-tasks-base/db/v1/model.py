@@ -28,7 +28,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 from compass.utils import util
 
-from flask.ext.login import UserMixin
+from flask_login import UserMixin
 from itsdangerous import URLSafeTimedSerializer
 
 BASE = declarative_base()

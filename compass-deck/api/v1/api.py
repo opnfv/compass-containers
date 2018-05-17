@@ -19,7 +19,7 @@ import simplejson as json
 from flask import Blueprint
 from flask import request
 
-from flask.ext.restful import Resource
+from flask_restful import Resource
 
 from compass.api.exception import BadRequest
 from compass.api.exception import Forbidden

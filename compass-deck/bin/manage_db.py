@@ -26,7 +26,7 @@ sys.path.append(current_dir)
 
 import switch_virtualenv
 
-from flask.ext.script import Manager
+from flask_script import Manager
 
 from compass.api import app
 from compass.db.api import database
