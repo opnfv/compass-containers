@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a494da4_93aae7d2",
+        "filename": "compass-tasks-osa/run.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 5455
+      },
+      "writtenOn": "2018-05-22T08:25:11Z",
+      "side": 1,
+      "message": "I found that when build this image there is message about missing pyyaml and the pip version didn\u0027t meet the requirement\n\nso i added two lines:\n    pip install pip --upgrade\n    pip install pyyaml\n\nhave you encountered this problem, Rama?",
+      "revId": "5e1d313e36d0a06dbf596a55ab543b669b409de7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
