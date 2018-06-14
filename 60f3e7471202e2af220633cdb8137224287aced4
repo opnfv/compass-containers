@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da5c1566_ccca026e",
+        "filename": "compass-tasks-osa/Dockerfile-arm64",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 386
+      },
+      "writtenOn": "2018-06-14T09:37:12Z",
+      "side": 1,
+      "message": "Just add \"run.sh\" but not run it. Is it for add a new docker image layer?",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 19
+      },
+      "revId": "60f3e7471202e2af220633cdb8137224287aced4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
