@@ -1,3 +1,5 @@
 FROM opnfv/compass-tasks-base
+ARG BRANCH=master
 
-# TODO: support arm64
+ADD ./run.sh /root/
+# TODO
