@@ -22,6 +22,30 @@
       "revId": "60f3e7471202e2af220633cdb8137224287aced4",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_0cc51a5b",
+        "filename": "compass-tasks-osa/Dockerfile-arm64",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 6613
+      },
+      "writtenOn": "2018-06-14T09:40:20Z",
+      "side": 1,
+      "message": "yes, kind of ugly. just to add an extra layer so the image will have a different id than base image.",
+      "parentUuid": "da5c1566_ccca026e",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 19
+      },
+      "revId": "60f3e7471202e2af220633cdb8137224287aced4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
