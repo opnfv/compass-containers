@@ -29,7 +29,7 @@ from compass.utils import util
 
 MACHINE_PRIMARY_FILEDS = ['mac', 'owner_id']
 SUPPORTED_FIELDS = [
-    'mac', 'tag', 'location',
+    'mac', 'tag', 'location', 'ipmi_credentials',
     'machine_attributes', 'owner_id']
 IGNORE_FIELDS = ['id', 'created_at', 'updated_at']
 UPDATED_FIELDS = [

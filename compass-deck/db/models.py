@@ -1532,11 +1532,11 @@ class Machine(BASE, HelperMixin, TimestampMixin):
     """Machine table."""
     __tablename__ = 'machine'
     id = Column(Integer, primary_key=True)
-    mac = Column(String(24), unique=True, nullable=False)
+    mac = Column(JSONEncoded, nullable=False)
     ipmi_credentials = Column(JSONEncoded, default={})
     tag = Column(JSONEncoded, default={})
     location = Column(JSONEncoded, default={})
-    owner_id = Column(Integer, ForeignKey('user.id'))
+    owner_id = Column(Integer, nullable=True)
     machine_attributes = Column(JSONEncoded, default={})
 
     switch_machines = relationship(
@@ -1564,7 +1564,8 @@ class Machine(BASE, HelperMixin, TimestampMixin):
         # TODO(xicheng): some validation can be moved to column.
         super(Machine, self).validate()
         try:
-            netaddr.EUI(self.mac)
+            for key, value in self.mac.items():
+                netaddr.EUI(value)
         except Exception:
             raise exception.InvalidParameter(
                 'mac address %s format uncorrect' % self.mac
