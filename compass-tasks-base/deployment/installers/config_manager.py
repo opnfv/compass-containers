@@ -170,6 +170,7 @@ class HostInfo(object):
         self.roles = self.host_info.setdefault(const.ROLES, [])
         self.patched_roles = self.host_info.setdefault(const.PATCHED_ROLES, [])
         self.ipmi = deepcopy(self.host_info.setdefault(const.IPMI, {}))
+        self.ipmi_credentials = deepcopy(self.host_info.setdefault(const.IPMI_CREDS, {}))
         self.reinstall_os_flag = self.host_info.get(const.REINSTALL_OS_FLAG)
         self.deployed_os_config = self.host_info.setdefault(
             const.DEPLOYED_OS_CONFIG, {}
@@ -275,6 +276,7 @@ class HostInfo(object):
     def baseinfo(self):
         return {
             const.REINSTALL_OS_FLAG: self.reinstall_os_flag,
+            const.IPMI_CREDS: self.ipmi_credentials,
             const.MAC_ADDR: self.mac,
             const.NAME: self.name,
             const.HOSTNAME: self.hostname,
