@@ -50,7 +50,7 @@ RESP_CLUSTERHOST_FIELDS = [
     'os_installed', 'distributed_system_installed',
     'os_name', 'os_id', 'ip',
     'reinstall_os', 'reinstall_distributed_system',
-    'owner', 'cluster_id',
+    'owner', 'cluster_id', 'ipmi_credentials',
     'created_at', 'updated_at',
     'patched_roles'
 ]
