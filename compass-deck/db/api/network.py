@@ -25,16 +25,16 @@ from compass.db import exception
 from compass.db import models
 
 
-SUPPORTED_FIELDS = ['subnet', 'name']
+SUPPORTED_FIELDS = ['subnet', 'name', 'gateway']
 RESP_FIELDS = [
-    'id', 'name', 'subnet', 'created_at', 'updated_at'
+    'id', 'name', 'subnet', 'gateway', 'created_at', 'updated_at'
 ]
 ADDED_FIELDS = ['subnet']
-OPTIONAL_ADDED_FIELDS = ['name']
+OPTIONAL_ADDED_FIELDS = ['name', 'gateway']
 IGNORE_FIELDS = [
     'id', 'created_at', 'updated_at'
 ]
-UPDATED_FIELDS = ['subnet', 'name']
+UPDATED_FIELDS = ['subnet', 'name', 'gateway']
 
 
 def _check_subnet(subnet):
