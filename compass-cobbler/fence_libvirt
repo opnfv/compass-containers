@@ -1,0 +1,109 @@
+#!/usr/bin/env python
+import libvirt
+import yaml
+import multiprocessing
+import click
+import sys
+
+
+SETTING = "/root/cobbler/settings"
+power_action_map = {
+        "on": "create",
+        "off": "destroy",
+        "status": "state"
+    }
+
+
+def get_virt_host(setting_file):
+    with open(setting_file) as fd:
+        try:
+            settings = yaml.load(fd)
+            return settings['server']
+        except Exception:
+            raise RuntimeError("Can't get server ip from %s" % SETTING)
+
+
+def get_libvit_connection(user, passwd):
+    # def request_cred(credentials, user_data):
+    #     for credential in credentials:
+    #         if credential[0] == libvirt.VIR_CRED_AUTHNAME:
+    #             credential[4] = user
+    #         elif credential[0] == libvirt.VIR_CRED_PASSPHRASE:
+    #             credential[4] = passwd
+    #     return 0
+    # auth = [[libvirt.VIR_CRED_AUTHNAME, libvirt.VIR_CRED_PASSPHRASE],
+    #          request_cred, None]
+    server = get_virt_host(SETTING)
+    conn = libvirt.open('qemu+tcp://%s/system' % server)
+    return conn
+
+
+def libvirt_function(domain, action, rc):
+    function = getattr(domain, power_action_map.get(action))
+    state, reason = domain.state()
+    if function.__name__ == "create":
+        if state == libvirt.VIR_DOMAIN_RUNNING:
+            rc.value = 1
+        else:
+            rc.value = function()
+    elif function.__name__ == "destroy":
+        if state == libvirt.VIR_DOMAIN_SHUTOFF:
+            rc.value = 1
+        else:
+            rc.value = function()
+    elif function.__name__ == "state":
+        rc.value = state
+
+
+def power_action(action, hostname, user, passwd):
+    conn = get_libvit_connection(user, passwd)
+    domain = conn.lookupByName(hostname)
+    rc = multiprocessing.Value('i')
+    p = multiprocessing.Process(target=libvirt_function,
+                                args=(domain, action, rc,))
+    p.start()
+    p.join()
+    print rc.value
+    return rc.value
+
+
+@click.command()
+@click.option("--action")
+@click.option("--hostname")
+@click.option("--user")
+@click.option("--passwd")
+def cli(action, hostname, user, passwd):
+    power_action(action, hostname, user, passwd)
+
+
+def no_cli():
+    opt = {}
+    fd = open("/home/stdin", "w")
+    for line in sys.stdin.readlines():
+        try:
+            fd.write(line)
+            line = line.strip()
+            name, value = line.split("=")
+            opt.update({name: value})
+        except Exception:
+            continue
+    fd.close()
+    try:
+        power_action(opt["action"], opt["hostname"],
+                     opt["user"], opt["passwd"])
+    except Exception:
+        raise RuntimeError("Invalid argument, \
+                    action: {0}, hostname: {1}, user: {2}, passwd: {3}".format(
+                    opt.get("action", None), opt.get("hostname", None),
+                    opt.get("user", None), opt.get("action", None)))
+
+
+def main():
+    if len(sys.argv) > 1:
+        cli()
+    else:
+        no_cli()
+
+
+if __name__ == '__main__':
+    main()
