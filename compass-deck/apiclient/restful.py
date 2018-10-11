@@ -231,7 +231,7 @@ class Client(object):
         return self._get('/switches/%s/machines-hosts' % switch_id, data=data)
 
     def add_switch_machine(self, switch_id, mac=None, port=None,
-                           vlans=None, ipmi_credentials=None,
+                           vlans=None, power_manage=None,
                            tag=None, location=None, raw_data=None):
         data = {}
         if raw_data:
@@ -246,8 +246,8 @@ class Client(object):
             if vlans:
                 data['vlans'] = vlans
 
-            if ipmi_credentials:
-                data['ipmi_credentials'] = ipmi_credentials
+            if power_manage:
+                data['power_manage'] = power_manage
 
             if tag:
                 data['tag'] = tag
@@ -258,7 +258,7 @@ class Client(object):
         return self._post('/switches/%s/machines' % switch_id, data=data)
 
     def update_switch_machine(self, switch_id, machine_id, port=None,
-                              vlans=None, ipmi_credentials=None, tag=None,
+                              vlans=None, power_manage=None, tag=None,
                               location=None, raw_data=None):
         data = {}
         if raw_data:
@@ -270,8 +270,8 @@ class Client(object):
             if vlans:
                 data['vlans'] = vlans
 
-            if ipmi_credentials:
-                data['ipmi_credentials'] = ipmi_credentials
+            if power_manage:
+                data['power_manage'] = power_manage
 
             if tag:
                 data['tag'] = tag
@@ -412,14 +412,14 @@ class Client(object):
 
         return self._get('/machines/%s' % machine_id, data=data)
 
-    def update_machine(self, machine_id, ipmi_credentials=None, tag=None,
+    def update_machine(self, machine_id, power_manage=None, tag=None,
                        location=None, raw_data=None):
         data = {}
         if raw_data:
             data = raw_data
         else:
-            if ipmi_credentials:
-                data['ipmi_credentials'] = ipmi_credentials
+            if power_manage:
+                data['power_manage'] = power_manage
 
             if tag:
                 data['tag'] = tag
@@ -429,15 +429,15 @@ class Client(object):
 
         return self._put('/machines/%s' % machine_id, data=data)
 
-    def patch_machine(self, machine_id, ipmi_credentials=None,
+    def patch_machine(self, machine_id, power_manage=None,
                       tag=None, location=None,
                       raw_data=None):
         data = {}
         if raw_data:
             data = raw_data
         else:
-            if ipmi_credentials:
-                data['ipmi_credentials'] = ipmi_credentials
+            if power_manage:
+                data['power_manage'] = power_manage
 
             if tag:
                 data['tag'] = tag

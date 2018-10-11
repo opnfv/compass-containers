@@ -48,9 +48,9 @@ RESP_CLUSTERHOST_FIELDS = [
     'cluster_id', 'clustername', 'location', 'tag',
     'networks', 'mac', 'switch_ip', 'port', 'switches',
     'os_installed', 'distributed_system_installed',
-    'os_name', 'os_id', 'ip',
-    'reinstall_os', 'reinstall_distributed_system',
-    'owner', 'cluster_id', 'ipmi_credentials',
+    'os_name', 'os_id', 'ip', 'reinstall_os',
+    'reinstall_distributed_system', 'owner', 'cluster_id',
+    'power_type', 'power_manage',
     'created_at', 'updated_at',
     'patched_roles'
 ]
