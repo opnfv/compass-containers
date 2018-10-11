@@ -58,17 +58,17 @@ UPDATED_FILTERS_FIELDS = ['put_machine_filters']
 PATCHED_FILTERS_FIELDS = ['patched_machine_filters']
 ADDED_MACHINES_FIELDS = ['mac']
 OPTIONAL_ADDED_MACHINES_FIELDS = [
-    'ipmi_credentials', 'tag', 'location', 'owner_id'
+    'power_manage', 'tag', 'location', 'owner_id'
 ]
 ADDED_SWITCH_MACHINES_FIELDS = ['port']
 OPTIONAL_ADDED_SWITCH_MACHINES_FIELDS = ['vlans']
 UPDATED_MACHINES_FIELDS = [
-    'ipmi_credentials',
+    'power_manage',
     'tag', 'location'
 ]
 UPDATED_SWITCH_MACHINES_FIELDS = ['port', 'vlans', 'owner_id']
 PATCHED_MACHINES_FIELDS = [
-    'patched_ipmi_credentials',
+    'patched_power_manage',
     'patched_tag', 'patched_location'
 ]
 PATCHED_SWITCH_MACHINES_FIELDS = ['patched_vlans']
@@ -85,13 +85,13 @@ RESP_ACTION_FIELDS = [
 RESP_MACHINES_FIELDS = [
     'id', 'switch_id', 'switch_ip', 'machine_id', 'switch_machine_id',
     'port', 'vlans', 'mac', 'owner_id',
-    'ipmi_credentials', 'tag', 'location',
+    'power_manage', 'tag', 'location',
     'created_at', 'updated_at'
 ]
 RESP_MACHINES_HOSTS_FIELDS = [
     'id', 'switch_id', 'switch_ip', 'machine_id', 'switch_machine_id',
     'port', 'vlans', 'mac',
-    'ipmi_credentials', 'tag', 'location', 'ip',
+    'power_manage', 'tag', 'location', 'ip',
     'name', 'hostname', 'os_name', 'owner',
     'os_installer', 'reinstall_os', 'os_installed',
     'clusters', 'created_at', 'updated_at'
@@ -988,13 +988,13 @@ def update_switchmachine(switch_machine_id, user=None, session=None, **kwargs):
     )
 
 
-# replace [vlans, ipmi_credentials, tag, location] to
-# [patched_vlans, patched_ipmi_credentials, patched_tag,
+# replace [vlans, power_manage, tag, location] to
+# [patched_vlans, patched_power_manage, patched_tag,
 # patched_location] in kwargs. It tells db these fields will
 # be patched.
 @utils.replace_filters(
     vlans='patched_vlans',
-    ipmi_credentials='patched_ipmi_credentials',
+    power_manage='patched_power_manage',
     tag='patched_tag',
     location='patched_location'
 )
@@ -1024,13 +1024,13 @@ def patch_switch_machine(
     )
 
 
-# replace [vlans, ipmi_credentials, tag, location] to
-# [patched_vlans, patched_ipmi_credentials, patched_tag,
+# replace [vlans, power_manage, tag, location] to
+# [patched_vlans, patched_power_manage, patched_tag,
 # patched_location] in kwargs. It tells db these fields will
 # be patched.
 @utils.replace_filters(
     vlans='patched_vlans',
-    ipmi_credentials='patched_ipmi_credentials',
+    power_manage='patched_power_manage',
     tag='patched_tag',
     location='patched_location'
 )

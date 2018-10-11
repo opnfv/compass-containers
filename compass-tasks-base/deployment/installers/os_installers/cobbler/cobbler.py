@@ -397,25 +397,25 @@ class CobblerInstaller(OSInstaller):
 
         return cluster_vas_dict
 
-    def _check_and_set_system_impi(self, host_id, sys_id):
+    def _check_and_set_system_power(self, host_id, sys_id):
         if not sys_id:
             logging.info("System is None!")
             return False
 
         system = self.dump_system_info(host_id)
-        if system[self.POWER_TYPE] != 'ipmilan' or not system[self.POWER_USER]:
+        if not system.get(self.POWER_TYPE):
             # Set sytem power type to ipmilan if needs and set IPMI info
-            ipmi_info = self.config_manager.get_host_ipmi_info(host_id)
-            if not ipmi_info:
+            power_info = self.config_manager.get_host_power_info(host_id)
+            if not power_info:
                 logging.info('No IPMI information found! Failed power on.')
                 return False
 
-            ipmi_ip, ipmi_user, ipmi_pass = ipmi_info
+            ip, username, password = power_info
             power_opts = {}
             power_opts[self.POWER_TYPE] = 'ipmilan'
-            power_opts[self.POWER_ADDR] = ipmi_ip
-            power_opts[self.POWER_USER] = ipmi_user
-            power_opts[self.POWER_PASS] = ipmi_pass
+            power_opts[self.POWER_ADDR] = ip
+            power_opts[self.POWER_USER] = username
+            power_opts[self.POWER_PASS] = password
 
             self._update_system_config(sys_id, power_opts)
 
@@ -424,26 +424,26 @@ class CobblerInstaller(OSInstaller):
     def poweron(self, host_id):
         hostname = self.config_manager.get_hostname(host_id)
         sys_id = self._get_create_system(hostname)
-        if not self._check_and_set_system_impi(sys_id):
+        if not self._check_and_set_system_power(host_id, sys_id):
             return
 
-        self.remote.power_system(sys_id, self.token, power='on')
+        self.remote.power_system(sys_id, 'on', self.token)
         logging.info("Host with ID=%d starts to power on!" % host_id)
 
     def poweroff(self, host_id):
         hostname = self.config_manager.get_hostname(host_id)
         sys_id = self._get_create_system(hostname)
-        if not self._check_and_set_system_impi(sys_id):
+        if not self._check_and_set_system_power(host_id, sys_id):
             return
 
-        self.remote.power_system(sys_id, self.token, power='off')
+        self.remote.power_system(sys_id, 'off', self.token)
         logging.info("Host with ID=%d starts to power off!" % host_id)
 
     def reset(self, host_id):
         hostname = self.config_manager.get_hostname(host_id)
         sys_id = self._get_create_system(hostname)
-        if not self._check_and_set_system_impi(sys_id):
+        if not self._check_and_set_system_power(host_id, sys_id):
             return
 
-        self.remote.power_system(sys_id, self.token, power='reboot')
+        self.remote.power_system(sys_id, 'reboot', self.token)
         logging.info("Host with ID=%d starts to reboot!" % host_id)

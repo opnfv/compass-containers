@@ -111,7 +111,34 @@ class DeployManager(object):
         self.os_installer.set_package_installer_config(pk_installer_config)
 
         # start to deploy OS
-        return self.os_installer.deploy()
+        result = self.os_installer.deploy()
+        self.reset_server()
+
+        return result
+
+    def poweron_server(self):
+        if not self.os_installer:
+            return
+
+        host_id_list = self.os_installer.config_manager.get_host_id_list()
+        for host_id in host_id_list:
+            self.os_installer.poweron(host_id)
+
+    def poweroff_server(self):
+        if not self.os_installer:
+            return
+
+        host_id_list = self.os_installer.config_manager.get_host_id_list()
+        for host_id in host_id_list:
+            self.os_installer.poweroff(host_id)
+
+    def reset_server(self):
+        if not self.os_installer:
+            return
+
+        host_id_list = self.os_installer.config_manager.get_host_id_list()
+        for host_id in host_id_list:
+            self.os_installer.reset(host_id)
 
     def deploy_target_system(self):
         """Deploy target system to all hosts in the cluster.
