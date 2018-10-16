@@ -68,7 +68,7 @@ def _get_machine(machine_id, session=None, **kwargs):
 @utils.input_validates(mac=utils.check_mac)
 def _add_machine(mac, owner_id=None, session=None, **kwargs):
     """Add a machine."""
-    if isinstance(owner_id, (int, long)):
+    if not owner_id or isinstance(owner_id, (int, long)):
         return utils.add_db_object(
             session, models.Machine,
             True,
