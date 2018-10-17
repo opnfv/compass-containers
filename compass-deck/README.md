@@ -1,2 +1,2 @@
 # compass-deck
-RESTful API Server for Compass
+RESTful API for Compass
