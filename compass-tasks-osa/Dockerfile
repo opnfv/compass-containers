@@ -1,4 +1,4 @@
-FROM opnfv/compass-tasks-base
+FROM opnfv/compass-tasks-base:gambia
 ARG BRANCH=master
 
 ADD ./run.sh /root/
