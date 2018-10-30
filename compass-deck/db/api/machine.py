@@ -29,20 +29,20 @@ from compass.utils import util
 
 MACHINE_PRIMARY_FILEDS = ['mac', 'owner_id']
 SUPPORTED_FIELDS = [
-    'mac', 'tag', 'location', 'ipmi_credentials',
-    'machine_attributes', 'owner_id']
+    'mac', 'tag', 'location', 'power_manage',
+    'machine_attributes', 'owner_id', 'power_type']
 IGNORE_FIELDS = ['id', 'created_at', 'updated_at']
 UPDATED_FIELDS = [
-    'ipmi_credentials', 'machine_attributes',
-    'tag', 'location']
+    'mac', 'tag', 'location', 'power_manage',
+    'machine_attributes', 'power_type']
 PATCHED_FIELDS = [
-    'patched_ipmi_credentials', 'patched_tag',
+    'patched_power_manage', 'patched_tag',
     'patched_location'
 ]
 RESP_FIELDS = [
-    'id', 'mac', 'ipmi_credentials', 'switches', 'switch_ip',
+    'id', 'mac', 'power_manage', 'switches', 'switch_ip',
     'port', 'vlans', 'machine_attributes', 'owner_id',
-    'tag', 'location', 'created_at', 'updated_at'
+    'tag', 'location', 'power_type', 'created_at', 'updated_at'
 ]
 RESP_DEPLOY_FIELDS = [
     'status', 'machine'
@@ -149,7 +149,7 @@ def _update_machine(machine_id, session=None, **kwargs):
     optional_support_keys=UPDATED_FIELDS,
     ignore_support_keys=IGNORE_FIELDS
 )
-@utils.input_validates(ipmi_credentials=utils.check_ipmi_credentials)
+@utils.input_validates(power_manage=utils.check_power_manage)
 @database.run_in_session()
 @user_api.check_user_permission(
     permission.PERMISSION_ADD_MACHINE
@@ -161,11 +161,11 @@ def update_machine(machine_id, user=None, session=None, **kwargs):
     )
 
 
-# replace [ipmi_credentials, tag, location] to
-# [patched_ipmi_credentials, patched_tag, patched_location]
+# replace [power_manage, tag, location] to
+# [patched_power_manage, patched_tag, patched_location]
 # in kwargs. It tells db these fields will be patched.
 @utils.replace_filters(
-    ipmi_credentials='patched_ipmi_credentials',
+    power_manage='patched_power_manage',
     tag='patched_tag',
     location='patched_location'
 )
@@ -174,7 +174,7 @@ def update_machine(machine_id, user=None, session=None, **kwargs):
     ignore_support_keys=IGNORE_FIELDS
 )
 @database.run_in_session()
-@utils.output_validates(ipmi_credentials=utils.check_ipmi_credentials)
+@utils.output_validates(power_manage=utils.check_power_manage)
 @user_api.check_user_permission(
     permission.PERMISSION_ADD_MACHINE
 )

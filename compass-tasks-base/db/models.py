@@ -1533,10 +1533,11 @@ class Machine(BASE, HelperMixin, TimestampMixin):
     __tablename__ = 'machine'
     id = Column(Integer, primary_key=True)
     mac = Column(JSONEncoded, nullable=False)
-    ipmi_credentials = Column(JSONEncoded, default={})
     tag = Column(JSONEncoded, default={})
     location = Column(JSONEncoded, default={})
     owner_id = Column(Integer, nullable=True)
+    power_type = Column(String(10), default="ipmilan")
+    power_manage = Column(JSONEncoded, default={})
     machine_attributes = Column(JSONEncoded, default={})
 
     switch_machines = relationship(
@@ -1572,15 +1573,15 @@ class Machine(BASE, HelperMixin, TimestampMixin):
             )
 
     @property
-    def patched_ipmi_credentials(self):
-        return self.ipmi_credentials
+    def patched_power_manage(self):
+        return self.power_manage
 
-    @patched_ipmi_credentials.setter
-    def patched_ipmi_credentials(self, value):
+    @patched_power_manage.setter
+    def patched_power_manage(self, value):
         if not value:
             return
-        ipmi_credentials = copy.deepcopy(self.ipmi_credentials)
-        self.ipmi_credentials = util.merge_dict(ipmi_credentials, value)
+        power_manage = copy.deepcopy(self.power_manage)
+        self.power_manage = util.merge_dict(power_manage, value)
 
     @property
     def patched_tag(self):

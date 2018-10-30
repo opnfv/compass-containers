@@ -169,8 +169,8 @@ class HostInfo(object):
         self.package_config = self.host_info.setdefault(const.PK_CONFIG, {})
         self.roles = self.host_info.setdefault(const.ROLES, [])
         self.patched_roles = self.host_info.setdefault(const.PATCHED_ROLES, [])
-        self.ipmi = deepcopy(self.host_info.setdefault(const.IPMI, {}))
-        self.ipmi_credentials = deepcopy(self.host_info.setdefault(const.IPMI_CREDS, {}))
+        self.power_type = deepcopy(self.host_info.setdefault(const.POWER_TYPE, {}))
+        self.power_manage = deepcopy(self.host_info.setdefault(const.POWER_MANAGE, {}))
         self.reinstall_os_flag = self.host_info.get(const.REINSTALL_OS_FLAG)
         self.deployed_os_config = self.host_info.setdefault(
             const.DEPLOYED_OS_CONFIG, {}
@@ -276,7 +276,8 @@ class HostInfo(object):
     def baseinfo(self):
         return {
             const.REINSTALL_OS_FLAG: self.reinstall_os_flag,
-            const.IPMI_CREDS: self.ipmi_credentials,
+            const.POWER_TYPE: self.power_type,
+            const.POWER_MANAGE: self.power_manage,
             const.MAC_ADDR: self.mac,
             const.NAME: self.name,
             const.HOSTNAME: self.hostname,
@@ -516,14 +517,15 @@ class BaseConfigManager(object):
         self.validate_host(host_id)
         return self.hosts_info[host_id].roles_mapping
 
-    def get_host_ipmi_info(self, host_id):
+    def get_host_power_info(self, host_id):
         self.validate_host(host_id)
-        if self.hosts_info[host_id].ipmi:
+        if self.hosts_info[host_id].power_manage:
             return (
-                self.hosts_info[host_id].ipmi[const.IP_ADDR],
-                self.hosts_info[host_id].ipmi
-                [const.IPMI_CREDS][const.USERNAME],
-                self.hosts_info[host_id].ipmi
-                [const.IPMI_CREDS][const.USERNAME])
+                self.hosts_info[host_id].power_manage
+                [const.IP_ADDR],
+                self.hosts_info[host_id].power_manage
+                [const.USERNAME],
+                self.hosts_info[host_id].power_manage
+                [const.PASSWORD])
         else:
             return (None, None, None)

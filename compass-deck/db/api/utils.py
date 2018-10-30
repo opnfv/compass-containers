@@ -1208,42 +1208,41 @@ def check_name(name):
         )
 
 
-def _check_ipmi_credentials_ip(ip):
+def _check_power_manage_ip(ip):
     check_ip(ip)
 
 
-def check_ipmi_credentials(ipmi_credentials):
-    """Check ipmi credentials format is correct."""
-    if not ipmi_credentials:
+def check_power_manage(power_manage):
+    """Check power manage format is correct."""
+    if not power_manage:
         return
-    if not isinstance(ipmi_credentials, dict):
+    if not isinstance(power_manage, dict):
         raise exception.InvalidParameter(
-            'invalid ipmi credentials %s' % ipmi_credentials
-
+            'invalid power manage %s' % power_manage
         )
-    for key in ipmi_credentials:
+    for key in power_manage:
         if key not in ['ip', 'username', 'password']:
             raise exception.InvalidParameter(
-                'unrecognized field %s in ipmi credentials %s' % (
-                    key, ipmi_credentials
+                'unrecognized field %s in power manage %s' % (
+                    key, power_manage
                 )
             )
     for key in ['ip', 'username', 'password']:
-        if key not in ipmi_credentials:
+        if key not in power_manage:
             raise exception.InvalidParameter(
-                'no field %s in ipmi credentials %s' % (
-                    key, ipmi_credentials
+                'no field %s in power manage %s' % (
+                    key, power_manage
                 )
             )
-        check_ipmi_credential_field = '_check_ipmi_credentials_%s' % key
+        check_power_manage_field = '_check_power_manage_%s' % key
         this_module = globals()
-        if check_ipmi_credential_field in this_module:
-            this_module[check_ipmi_credential_field](
-                ipmi_credentials[key]
+        if check_power_manage_field in this_module:
+            this_module[check_power_manage_field](
+                power_manage[key]
             )
         else:
             logging.debug(
-                'function %s is not defined', check_ipmi_credential_field
+                'function %s is not defined', check_power_manage_field
             )
 
 

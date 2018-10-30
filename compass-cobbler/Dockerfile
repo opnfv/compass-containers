@@ -7,7 +7,7 @@ ARG BRANCH=master
 RUN yum -y update && \
     yum -y install epel-release && \
     yum -y install wget dhcp bind syslinux pykickstart file initscripts net-tools tcpdump xinetd vim \
-    avahi avahi-tools ntp fence_agents && \
+    avahi avahi-tools ntp fence-agents libvirt-devel python-devel gcc python-pip && \
     wget http://artifacts.opnfv.org/compass4nfv/package/cobbler/cobbler-2.6.10-1.fc22.noarch.rpm && \
     wget http://artifacts.opnfv.org/compass4nfv/package/cobbler/cobbler-web-2.6.10-1.fc22.noarch.rpm && \
     yum -y localinstall cobbler-2.6.10-1.fc22.noarch.rpm cobbler-web-2.6.10-1.fc22.noarch.rpm && \
@@ -16,7 +16,11 @@ RUN yum -y update && \
     systemctl enable httpd && \
     systemctl enable dhcpd && \
     systemctl enable xinetd && \
-    systemctl enable ntpd
+    systemctl enable ntpd && \
+    pip install libvirt-python click
+
+COPY fence_libvirt /usr/sbin/fence_libvirt
+COPY fence_libvirt.template /etc/cobbler/power/fence_libvirt.template
 
 # some tweaks on services
 RUN sed -i -e 's/\(^.*disable.*=\) yes/\1 no/' /etc/xinetd.d/tftp && \
