@@ -23,14 +23,17 @@ import sys
 current_dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(current_dir)
 
-
 import switch_virtualenv
+
+import yaml
 
 from flask_script import Manager
 
 from compass.api import app
 from compass.db.api import database
 from compass.db.api import switch as switch_api
+from compass.db.api import machine as machine_api
+from compass.db.api import network as network_api
 from compass.db.api import user as user_api
 from compass.utils import flags
 from compass.utils import logsetting
@@ -56,6 +59,13 @@ flags.add('switch_machines_file',
               'is machine,<switch ip>,<switch port>,<vlan>,<mac> '
               'or switch,<switch_ip>,<switch_vendor>,'
               '<switch_version>,<switch_community>,<switch_state>'),
+          default='')
+flags.add('machine_file',
+          help=(
+              'file for add machine '
+              'contains one or more mac address of a host '
+              'if it is a baremetal machine, ipmi credential is also '
+              'required.'),
           default='')
 flags.add('search_cluster_properties',
           help='comma separated properties to search in cluster config',
@@ -157,6 +167,48 @@ def set_switch_machines():
             switch_api.add_switch_machine(
                 switch_id, False, user=user, **machine
             )
+
+
+@app_manager.command
+def set_machine():
+    if not flags.OPTIONS.machine_file:
+        print 'flag --machine_file is missing'
+        return
+    database.init()
+    machine_file = flags.OPTIONS.machine_file
+    user = user_api.get_user_object(
+        setting.COMPASS_ADMIN_EMAIL
+    )
+    with open(machine_file) as f:
+        machine_data = yaml.load(f)
+        for machine in machine_data:
+            power_manage = {}
+            power_manage.update(
+                {"ip": machine.get("power_ip", "")})
+            power_manage.update(
+                {"username": machine.get("power_user", "")})
+            power_manage.update(
+                {"password": machine.get("power_pass", "")})
+            machine_api.add_machine(user=user, mac=machine["mac"],
+                                    power_type=machine["power_type"],
+                                    power_manage=power_manage)
+
+
+@app_manager.command
+def add_subnet():
+    if not flags.OPTIONS.subnet:
+        print 'flag --subnet is missing'
+        return
+    database.init()
+    subnet_tuple = flags.OPTIONS.subnet
+    subnet_name = subnet_tuple[0]
+    subnet_cidr = subnet_tuple[1]
+    user = user_api.get_user_object(
+        setting.COMPASS_ADMIN_EMAIL
+    )
+    network_api.add_subnet(
+        user=user, name=subnet_name, subnet=subnet_cidr
+    )
 
 
 if __name__ == "__main__":
