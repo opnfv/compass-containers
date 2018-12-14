@@ -84,7 +84,7 @@ def no_cli():
             opt.update({name: value})
         except Exception:
             continue
-    try:
+
     if opt["action"] and opt["hostname"]:
         power_action(opt["action"], opt["hostname"],
                      opt["user"], opt["passwd"])
