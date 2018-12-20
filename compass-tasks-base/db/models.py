@@ -1866,6 +1866,7 @@ class Subnet(BASE, TimestampMixin, HelperMixin):
     name = Column(String(80), unique=True, nullable=True)
     subnet = Column(String(80), unique=True, nullable=False)
     gateway = Column(String(80), unique=True, nullable=True)
+    reserved_range = Column(String(80), unique=False, nullable=True)
 
     host_networks = relationship(
         HostNetwork,

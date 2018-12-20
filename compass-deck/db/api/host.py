@@ -16,6 +16,7 @@
 import functools
 import logging
 import netaddr
+import ipaddress
 import re
 
 from compass.db.api import database
@@ -23,6 +24,7 @@ from compass.db.api import metadata_holder as metadata_api
 from compass.db.api import permission
 from compass.db.api import user as user_api
 from compass.db.api import utils
+from compass.db.api import network
 from compass.db import exception
 from compass.db import models
 from compass.utils import util
@@ -642,6 +644,35 @@ def get_hostnetwork(host_network_id, user=None, session=None, **kwargs):
     return _get_hostnetwork(host_network_id, session=session)
 
 
+def check_ip_available(subnet, ip):
+    if not subnet.reserved_range:
+       return
+    ip_int = int(ipaddress.IPv4Address(ip.decode()))
+    reserved_ranges = []
+    reserved_ips = []
+    for item in subnet.reserved_range.split(','):
+        ip_ends = item.split('-')
+        if len(ip_ends) == 2:
+            reserved_ranges.append(item)
+        elif len(ip_ends) == 1:
+            reserved_ips.append(item)
+    for item in reserved_ranges:
+        ends = item.split('-')
+        check_1 = int(ipaddress.IPv4Address(ends[0].decode())) - ip_int
+        check_2 = int(ipaddress.IPv4Address(ends[1].decode())) - ip_int
+        if (check_1 > 0) ^ (check_2 > 0):
+            raise exception.Forbidden(
+                'IP %s is reserved, reserved range: %s'
+                % (ip, subnet.reserved_range)
+                )
+    for item in reserved_ips:
+        if ip_int == int(ipaddress.IPv4Address(item.decode())):
+            raise exception.Forbidden(
+                'IP %s is reserved, reserved range: %s'
+                % (ip, subnet.reserved_range)
+                )
+
+
 @utils.supported_filters(
     ADDED_NETWORK_FIELDS,
     optional_support_keys=OPTIONAL_ADDED_NETWORK_FIELDS,
@@ -652,17 +683,20 @@ def get_hostnetwork(host_network_id, user=None, session=None, **kwargs):
 )
 @utils.wrap_to_dict(RESP_NETWORK_FIELDS)
 def _add_host_network(
-    host_id, exception_when_existing=True,
-    session=None, user=None, interface=None, ip=None, **kwargs
+    host_id, exception_when_existing=True, session=None,
+    user=None, interface=None, ip=None, subnet_id=None, **kwargs
 ):
     """Add hostnetwork to a host."""
     host = _get_host(host_id, session=session)
     check_host_editable(host, user=user)
+    subnet = network.get_subnet_internal(subnet_id, session=session)
+    check_ip_available(subnet, ip)
     user_id = user.id
     return utils.add_db_object(
         session, models.HostNetwork,
         exception_when_existing,
-        host.id, interface, user_id, ip=ip, **kwargs
+        host.id, interface, user_id,
+        ip=ip, subnet_id=subnet_id, **kwargs
     )
 
 
@@ -671,14 +705,13 @@ def _add_host_network(
     permission.PERMISSION_ADD_HOST_NETWORK
 )
 def add_host_network(
-    host_id, exception_when_existing=True,
-    interface=None, user=None, session=None, **kwargs
+    host_id, exception_when_existing=True, interface=None,
+    user=None, session=None, subnet_id=None, **kwargs
 ):
     """Create a hostnetwork to a host."""
     return _add_host_network(
-        host_id,
-        exception_when_existing,
-        interface=interface, session=session, user=user, **kwargs
+        host_id, exception_when_existing, interface=interface,
+        user=user, session=session, subnet_id=subnet_id, **kwargs
     )
 
 
@@ -747,6 +780,8 @@ def _update_host_network(
 ):
     """Update host network."""
     check_host_editable(host_network.host, user=user)
+    subnet = network.get_subnet_internal(host_network.subnet_id, session=session)
+    check_ip_available(subnet, ip)
     return utils.update_db_object(session, host_network, **kwargs)
 
 

@@ -1219,6 +1219,7 @@ def check_power_manage(power_manage):
     if not isinstance(power_manage, dict):
         raise exception.InvalidParameter(
             'invalid power manage %s' % power_manage
+
         )
     for key in power_manage:
         if key not in ['ip', 'username', 'password']:

@@ -15,6 +15,7 @@
 """Network related database operations."""
 import logging
 import netaddr
+import ipaddress
 import re
 
 from compass.db.api import database
@@ -27,14 +28,15 @@ from compass.db import models
 
 SUPPORTED_FIELDS = ['subnet', 'name', 'gateway']
 RESP_FIELDS = [
-    'id', 'name', 'subnet', 'gateway', 'created_at', 'updated_at'
+    'id', 'name', 'subnet', 'gateway', 'created_at',
+    'updated_at', 'reserved_range'
 ]
 ADDED_FIELDS = ['subnet']
-OPTIONAL_ADDED_FIELDS = ['name', 'gateway']
+OPTIONAL_ADDED_FIELDS = ['name', 'gateway', 'reserved_range']
 IGNORE_FIELDS = [
     'id', 'created_at', 'updated_at'
 ]
-UPDATED_FIELDS = ['subnet', 'name', 'gateway']
+UPDATED_FIELDS = ['subnet', 'name', 'gateway', 'reserved_range']
 
 
 def _check_subnet(subnet):
@@ -45,6 +47,29 @@ def _check_subnet(subnet):
         logging.exception(error)
         raise exception.InvalidParameter(
             'subnet %s format unrecognized' % subnet)
+
+
+def _check_ip_range(ip_ranges):
+    """Check if the ip range is valid.
+    The valid range can be a range or individual ips.
+    Range should be two ips jointed with "-", different ip
+    ranges and ips should be separated by ","
+    e.g. "10.1.0.0-10.1.0.50, 10.1.0.60"
+    """
+    for ip_range in ip_ranges.split(','):
+        ip_ends = ip_range.split('-')
+        try:
+            ipaddress.IPv4Address(ip_ends[0].decode())
+            if len(ip_ends) == 2:
+                ipaddress.IPv4Address(ip_ends[1].decode())
+        except Exception as error:
+            logging.exception(error)
+            raise exception.InvalidParameter(
+                'ip range %s format unrecognized' % ip_ranges)
+        finally:
+            if len(ip_ends) > 2:
+                raise exception.InvalidParameter(
+                    'ip range %s format unrecognized' % ip_ranges)
 
 
 @utils.supported_filters(optional_support_keys=SUPPORTED_FIELDS)
@@ -72,6 +97,11 @@ def _get_subnet(subnet_id, session=None, **kwargs):
     )
 
 
+def get_subnet_internal(subnet_id, session=None, **kwargs):
+    """"Helper function to get subnet."""
+    return _get_subnet(subnet_id=subnet_id, session=session, **kwargs)
+
+
 @utils.supported_filters([])
 @database.run_in_session()
 @user_api.check_user_permission(
@@ -93,7 +123,7 @@ def get_subnet(
     ADDED_FIELDS, optional_support_keys=OPTIONAL_ADDED_FIELDS,
     ignore_support_keys=IGNORE_FIELDS
 )
-@utils.input_validates(subnet=_check_subnet)
+@utils.input_validates(subnet=_check_subnet, reserved_range=_check_ip_range)
 @database.run_in_session()
 @user_api.check_user_permission(
     permission.PERMISSION_ADD_SUBNET
@@ -114,7 +144,7 @@ def add_subnet(
     optional_support_keys=UPDATED_FIELDS,
     ignore_support_keys=IGNORE_FIELDS
 )
-@utils.input_validates(subnet=_check_subnet)
+@utils.input_validates(subnet=_check_subnet, reserved_range=_check_ip_range)
 @database.run_in_session()
 @user_api.check_user_permission(
     permission.PERMISSION_ADD_SUBNET
