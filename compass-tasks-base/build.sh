@@ -42,6 +42,7 @@ pip install --upgrade Flask
 pip install --upgrade virtualenvwrapper
 
 source `which virtualenvwrapper.sh`
+echo "source /usr/bin/virtualenvwrapper.sh" >> ~/.bashrc
 mkvirtualenv --system-site-packages compass-core
 workon compass-core
 cd $COMPASS_DIR
